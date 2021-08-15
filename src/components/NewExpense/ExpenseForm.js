@@ -2,29 +2,48 @@ import React, { useState } from "react";
 
 import "./ExpenseForm.css";
 
-const ExpenseForm = () => {
-  const [title, setTitile] = useState("");
-  const [amount, setAmount] = useState("");
-  const [date, setDate] = useState("");
+const ExpenseForm = (props) => {
+  const [enteredTitle, setEnteredTitile] = useState("");
+  const [enteredAmount, setEnteredAmount] = useState("");
+  const [enteredDate, setEnteredDate] = useState("");
 
   const titleChangeHandler = (event) => {
-    setTitile(event.target.value);
+    setEnteredTitile(event.target.value);
   };
 
   const amountChangeHandler = (event) => {
-    setAmount(event.target.value);
+    setEnteredAmount(event.target.value);
   };
 
   const dateChangeHandler = (event) => {
-    setDate(event.target.value);
+    setEnteredDate(event.target.value);
+  };
+
+  const submitHandler = (event) => {
+    event.preventDefault();
+
+    const expenseData = {
+      title: enteredTitle,
+      amount: enteredAmount,
+      date: new Date(enteredDate),
+    };
+
+    props.onSaveExpenseData(expenseData);
+    setEnteredTitile("");
+    setEnteredAmount("");
+    setEnteredDate("");
   };
 
   return (
-    <form>
+    <form onSubmit={submitHandler}>
       <div className="new-expense__controls">
         <div className="new-expense__control">
           <label>Title</label>
-          <input type="text" onChange={titleChangeHandler}></input>
+          <input
+            type="text"
+            value={enteredTitle}
+            onChange={titleChangeHandler}
+          ></input>
         </div>
         <div className="new-expense__control">
           <label>Amount</label>
@@ -32,6 +51,7 @@ const ExpenseForm = () => {
             type="number"
             min="0.01"
             step="0.01"
+            value={enteredAmount}
             onChange={amountChangeHandler}
           ></input>
         </div>
@@ -41,6 +61,7 @@ const ExpenseForm = () => {
             type="date"
             min="2021-01-01"
             max="2022-12-31"
+            value={enteredDate}
             onChange={dateChangeHandler}
           ></input>
         </div>
